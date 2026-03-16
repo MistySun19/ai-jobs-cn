@@ -1,0 +1,158 @@
+{
+  "source": "第五次全国经济普查公报(2024.12) + 国家统计局2024年城镇单位就业人员年平均工资",
+  "note": "就业人数为法人单位从业人员数(2023年末)，不含个体经营户；农林牧渔业就业人数来自统计年鉴(含全部就业形态)",
+  "industries": [
+    {
+      "name": "农林牧渔业",
+      "employment_wan": 16882,
+      "employment_source": "统计年鉴",
+      "avg_salary_non_private": 67475,
+      "avg_salary_private": 46433,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "采矿业",
+      "employment_wan": 469.8,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 140706,
+      "avg_salary_private": 76010,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "制造业",
+      "employment_wan": 10481.4,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 107987,
+      "avg_salary_private": 71467,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "电力热力燃气及水生产和供应业",
+      "employment_wan": 477.6,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 150285,
+      "avg_salary_private": 63574,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "建筑业",
+      "employment_wan": 5115.9,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 89519,
+      "avg_salary_private": 65494,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "批发和零售业",
+      "employment_wan": 5325.7,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 129658,
+      "avg_salary_private": 67059,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "交通运输仓储和邮政业",
+      "employment_wan": 1554.2,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 127889,
+      "avg_salary_private": 67973,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "住宿和餐饮业",
+      "employment_wan": 893.6,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 60240,
+      "avg_salary_private": 54042,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "信息传输软件和信息技术服务业",
+      "employment_wan": 1506.7,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 238966,
+      "avg_salary_private": 123193,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "金融业",
+      "employment_wan": 1235.5,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 201883,
+      "avg_salary_private": 135339,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "房地产业",
+      "employment_wan": 1439.8,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 91912,
+      "avg_salary_private": 55979,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "租赁和商务服务业",
+      "employment_wan": 3858.3,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 110353,
+      "avg_salary_private": 69214,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "科学研究和技术服务业",
+      "employment_wan": 1700.3,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 175425,
+      "avg_salary_private": 82387,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "水利环境和公共设施管理业",
+      "employment_wan": 485.5,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 68315,
+      "avg_salary_private": 49007,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "居民服务修理和其他服务业",
+      "employment_wan": 652.5,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 68159,
+      "avg_salary_private": 52139,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "教育",
+      "employment_wan": 2677.0,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 126185,
+      "avg_salary_private": 60719,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "卫生和社会工作",
+      "employment_wan": 1461.9,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 143173,
+      "avg_salary_private": 75287,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "文化体育和娱乐业",
+      "employment_wan": 519.5,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 126040,
+      "avg_salary_private": 61669,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资"
+    },
+    {
+      "name": "公共管理社会保障和社会组织",
+      "employment_wan": 2781.1,
+      "employment_source": "第五次全国经济普查公报",
+      "avg_salary_non_private": 114840,
+      "avg_salary_private": null,
+      "salary_source": "国家统计局2024年城镇单位就业人员年平均工资（公共管理类无私营单位数据）"
+    }
+  ]
+}

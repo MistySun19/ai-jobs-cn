@@ -1,0 +1,159 @@
+{
+  "data": [
+    {
+      "occupation": "幼儿教师",
+      "employment_wan": 283.19,
+      "source": "教育部2024年全国教育事业发展统计公报",
+      "year": 2024
+    },
+    {
+      "occupation": "小学教师",
+      "employment_wan": 659.01,
+      "source": "教育部2024年全国教育事业发展统计公报",
+      "year": 2024
+    },
+    {
+      "occupation": "初中教师",
+      "employment_wan": 414.88,
+      "source": "教育部2024年全国教育事业发展统计公报",
+      "year": 2024
+    },
+    {
+      "occupation": "高中教师",
+      "employment_wan": 230.18,
+      "source": "教育部2024年全国教育事业发展统计公报",
+      "year": 2024
+    },
+    {
+      "occupation": "高校教师",
+      "employment_wan": 216.35,
+      "source": "教育部2024年全国教育事业发展统计公报",
+      "year": 2024
+    },
+    {
+      "occupation": "特殊教育教师",
+      "employment_wan": 8.13,
+      "source": "教育部2024年全国教育事业发展统计公报",
+      "year": 2024
+    },
+    {
+      "occupation": "中等职业教育教师",
+      "employment_wan": 72.94,
+      "source": "教育部2024年全国教育事业发展统计公报",
+      "year": 2024
+    },
+    {
+      "occupation": "临床医生（执业医师+执业助理医师）",
+      "employment_wan": 508.2,
+      "source": "国家卫健委2024年我国卫生健康事业发展统计公报",
+      "year": 2024
+    },
+    {
+      "occupation": "注册护士",
+      "employment_wan": 585.5,
+      "source": "国家卫健委2024年我国卫生健康事业发展统计公报",
+      "year": 2024
+    },
+    {
+      "occupation": "律师",
+      "employment_wan": 83,
+      "source": "司法部/律新社2025年中国律师业最新数据",
+      "year": 2025
+    },
+    {
+      "occupation": "公证员",
+      "employment_wan": 1.5,
+      "source": "司法部法律服务队伍统计（2025年数据）",
+      "year": 2025
+    },
+    {
+      "occupation": "法官（员额法官）",
+      "employment_wan": 12,
+      "source": "最高人民法院相关统计（约12万名员额法官）",
+      "year": 2023
+    },
+    {
+      "occupation": "注册会计师（执业）",
+      "employment_wan": 10.5,
+      "source": "中国注册会计师协会（截至2024年12月31日执业注册会计师105007人）",
+      "year": 2024
+    },
+    {
+      "occupation": "注册会计师（含非执业）",
+      "employment_wan": 38.96,
+      "source": "中国注册会计师协会（截至2024年12月31日个人会员389563人）",
+      "year": 2024
+    },
+    {
+      "occupation": "税务师",
+      "employment_wan": 24.4,
+      "source": "中国注册税务师协会（累计超24.4万人取得税务师职业资格证书）",
+      "year": 2024
+    },
+    {
+      "occupation": "公务员",
+      "employment_wan": 710,
+      "source": "人力资源和社会保障部统计（约716.7万人，常引用约710万）",
+      "year": 2015,
+      "note": "此为官方最后一次公开披露的数据，近年未更新"
+    },
+    {
+      "occupation": "公安民警",
+      "employment_wan": 200,
+      "source": "公安部相关统计（约200万名警察）",
+      "year": 2020,
+      "note": "不含辅警约400万人"
+    },
+    {
+      "occupation": "消防员（国家综合性消防救援队伍）",
+      "employment_wan": 22,
+      "source": "应急管理部（国家综合性消防救援队伍规模增至近22万人）",
+      "year": 2024
+    },
+    {
+      "occupation": "快递从业人员",
+      "employment_wan": 450,
+      "source": "国家邮政局相关统计（快递员数量接近450万人）",
+      "year": 2022,
+      "note": "2024年从业人员规模增速约12.9%，实际人数可能更高"
+    },
+    {
+      "occupation": "网约车驾驶员",
+      "employment_wan": 748.3,
+      "source": "交通运输部（截至2024年10月31日全国共发放网约车驾驶员证748.3万本）",
+      "year": 2024,
+      "note": "持证人数，实际活跃驾驶员可能少于此数"
+    },
+    {
+      "occupation": "外卖骑手",
+      "employment_wan": 1000,
+      "source": "新华网/科技日报（超1000万外卖骑手，2025年1月报道）",
+      "year": 2024,
+      "note": "跨平台累计数据，含美团、饿了么等平台"
+    },
+    {
+      "occupation": "民航飞行员（运输航空）",
+      "employment_wan": 6.55,
+      "source": "中国民航局2024年民航行业发展统计公报（运输航空公司驾驶员65452名）",
+      "year": 2024
+    },
+    {
+      "occupation": "一级注册建筑师",
+      "employment_wan": 5.14,
+      "source": "住建部注册建筑师统计（截至2025年全国一级注册建筑师51374人）",
+      "year": 2025
+    },
+    {
+      "occupation": "仲裁员",
+      "employment_wan": 6.7,
+      "source": "司法部法律服务队伍统计（6.7万仲裁员）",
+      "year": 2025
+    },
+    {
+      "occupation": "司法鉴定人",
+      "employment_wan": 4,
+      "source": "司法部法律服务队伍统计（4万司法鉴定人）",
+      "year": 2025
+    }
+  ]
+}

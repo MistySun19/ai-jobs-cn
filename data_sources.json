@@ -1,0 +1,898 @@
+{
+  "description": "AI Jobs CN 数据溯源文件",
+  "generated": "2026-03-16",
+  "global_sources": {
+    "industry_employment": "第五次全国经济普查公报 (2024年12月发布, 统计时点2023年末)",
+    "industry_salary": "国家统计局2024年城镇单位就业人员年平均工资 (2025年5月发布)",
+    "education_employment": "教育部2024年全国教育事业发展统计公报",
+    "health_employment": "国家卫健委2024年我国卫生健康事业发展统计公报",
+    "legal_employment": "司法部/律师协会/注册会计师协会等行业统计",
+    "gig_employment": "交通运输部/国家邮政局/新闻报道等公开数据",
+    "salary_refs": "国家统计局分岗位工资数据 + 智联招聘/Indeed等招聘平台公开报告",
+    "ai_scores": "基于AI对就业影响研究的专家评估 (评分标准0-10)"
+  },
+  "occupations": [
+    {
+      "name": "软件工程师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "数据分析师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "数据库管理员",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "网络工程师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "系统运维工程师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "UI/UX设计师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "产品经理",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "测试工程师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "算法工程师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "职业参考+行业加权",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "前端开发工程师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "信息安全工程师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "游戏开发工程师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "技术支持专员",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "IT项目经理",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "嵌入式开发工程师",
+      "employment_source": "行业拆分(信息传输软件和信息技术服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "信息传输软件和信息技术服务业"
+    },
+    {
+      "name": "银行柜员",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "会计师",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "审计师",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "金融分析师",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "证券经纪人",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "保险代理人",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "基金经理",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "风控专员",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "税务师",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "精算师",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "信贷审批员",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "投资顾问",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "出纳员",
+      "employment_source": "行业拆分(金融业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "金融业"
+    },
+    {
+      "name": "小学教师",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "中学教师",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "大学教授",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "幼儿教师",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "特殊教育教师",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "职业培训讲师",
+      "employment_source": "行业拆分(教育)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "教育咨询师",
+      "employment_source": "行业拆分(教育)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "在线教育讲师",
+      "employment_source": "行业拆分(教育)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "高校辅导员",
+      "employment_source": "行业拆分(教育)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "驾校教练",
+      "employment_source": "行业拆分(教育)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "体育教师/教练",
+      "employment_source": "行业拆分(教育)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "教育"
+    },
+    {
+      "name": "临床医生",
+      "employment_source": "权威统计数据",
+      "salary_source": "职业参考+行业加权",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "护士",
+      "employment_source": "权威统计数据",
+      "salary_source": "职业参考+行业加权",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "药剂师",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "中医师",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "牙科医生",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "医学检验师",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "康复治疗师",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "心理咨询师",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "医学影像技师",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "公共卫生医师",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "护工/护理员",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "营养师",
+      "employment_source": "行业拆分(卫生和社会工作)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "卫生和社会工作"
+    },
+    {
+      "name": "兽医",
+      "employment_source": "行业拆分(农林牧渔业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "农林牧渔业"
+    },
+    {
+      "name": "机械工程师",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "电气工程师",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "质量检验员",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "焊工",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "数控机床操作工",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "装配工",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "工业设计师",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "化工技术员",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "纺织工",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "食品加工工",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "电子装配工",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "生产主管",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "模具工",
+      "employment_source": "行业拆分(制造业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "制造业"
+    },
+    {
+      "name": "建筑工人",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "钢筋工",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "水泥工/泥工",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "建筑设计师",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "土木工程师",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "装修工",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "测量员",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "起重机操作员",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "电梯安装维修工",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "水暖工",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "室内设计师",
+      "employment_source": "行业拆分(建筑业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "建筑业"
+    },
+    {
+      "name": "种植农民",
+      "employment_source": "行业拆分(农林牧渔业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "农林牧渔业"
+    },
+    {
+      "name": "畜牧养殖户",
+      "employment_source": "行业拆分(农林牧渔业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "农林牧渔业"
+    },
+    {
+      "name": "渔民",
+      "employment_source": "行业拆分(农林牧渔业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "农林牧渔业"
+    },
+    {
+      "name": "林业工人",
+      "employment_source": "行业拆分(农林牧渔业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "农林牧渔业"
+    },
+    {
+      "name": "农业技术员",
+      "employment_source": "行业拆分(农林牧渔业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "农林牧渔业"
+    },
+    {
+      "name": "园艺师",
+      "employment_source": "行业拆分(农林牧渔业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "农林牧渔业"
+    },
+    {
+      "name": "农机操作员",
+      "employment_source": "行业拆分(农林牧渔业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "农林牧渔业"
+    },
+    {
+      "name": "人力资源专员",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "市场营销专员",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "管理咨询师",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "行政助理/文员",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "客户服务代表",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "翻译/口译员",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "公关专员",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "广告策划",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "商务代表/销售",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "采购专员",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "法务专员",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "企业培训师",
+      "employment_source": "行业拆分(租赁和商务服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "租赁和商务服务业"
+    },
+    {
+      "name": "公务员",
+      "employment_source": "权威统计数据",
+      "salary_source": "职业参考+行业加权",
+      "industry": "公共管理社会保障和社会组织"
+    },
+    {
+      "name": "社区工作者",
+      "employment_source": "行业拆分(公共管理社会保障和社会组织)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "公共管理社会保障和社会组织"
+    },
+    {
+      "name": "消防员",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "公共管理社会保障和社会组织"
+    },
+    {
+      "name": "警察",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "公共管理社会保障和社会组织"
+    },
+    {
+      "name": "律师",
+      "employment_source": "权威统计数据",
+      "salary_source": "职业参考+行业加权",
+      "industry": "公共管理社会保障和社会组织"
+    },
+    {
+      "name": "法官",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "公共管理社会保障和社会组织"
+    },
+    {
+      "name": "公证员",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "公共管理社会保障和社会组织"
+    },
+    {
+      "name": "城管执法人员",
+      "employment_source": "行业拆分(公共管理社会保障和社会组织)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "公共管理社会保障和社会组织"
+    },
+    {
+      "name": "网约车/出租车司机",
+      "employment_source": "权威统计数据",
+      "salary_source": "职业参考+行业加权",
+      "industry": "交通运输仓储和邮政业"
+    },
+    {
+      "name": "货车司机",
+      "employment_source": "行业拆分(交通运输仓储和邮政业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "交通运输仓储和邮政业"
+    },
+    {
+      "name": "公交车司机",
+      "employment_source": "行业拆分(交通运输仓储和邮政业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "交通运输仓储和邮政业"
+    },
+    {
+      "name": "快递员",
+      "employment_source": "权威统计数据",
+      "salary_source": "职业参考+行业加权",
+      "industry": "交通运输仓储和邮政业"
+    },
+    {
+      "name": "外卖骑手",
+      "employment_source": "权威统计数据",
+      "salary_source": "职业参考+行业加权",
+      "industry": "交通运输仓储和邮政业"
+    },
+    {
+      "name": "飞行员",
+      "employment_source": "权威统计数据",
+      "salary_source": "行业平均×职业系数",
+      "industry": "交通运输仓储和邮政业"
+    },
+    {
+      "name": "船员",
+      "employment_source": "行业拆分(交通运输仓储和邮政业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "交通运输仓储和邮政业"
+    },
+    {
+      "name": "仓储物流员",
+      "employment_source": "行业拆分(交通运输仓储和邮政业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "交通运输仓储和邮政业"
+    },
+    {
+      "name": "调度员",
+      "employment_source": "行业拆分(交通运输仓储和邮政业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "交通运输仓储和邮政业"
+    },
+    {
+      "name": "记者/新闻编辑",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "摄影师/摄像师",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "平面设计师",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "视频剪辑师",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "播音主持人",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "作家/编剧",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "图书馆员",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "档案管理员",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "网络主播/自媒体",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "动画设计师",
+      "employment_source": "行业拆分(文化体育和娱乐业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "文化体育和娱乐业"
+    },
+    {
+      "name": "零售店员",
+      "employment_source": "行业拆分(批发和零售业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "批发和零售业"
+    },
+    {
+      "name": "收银员",
+      "employment_source": "行业拆分(批发和零售业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "批发和零售业"
+    },
+    {
+      "name": "厨师",
+      "employment_source": "行业拆分(住宿和餐饮业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "住宿和餐饮业"
+    },
+    {
+      "name": "餐厅服务员",
+      "employment_source": "行业拆分(住宿和餐饮业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "住宿和餐饮业"
+    },
+    {
+      "name": "电商运营",
+      "employment_source": "行业拆分(批发和零售业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "批发和零售业"
+    },
+    {
+      "name": "直播带货主播",
+      "employment_source": "行业拆分(批发和零售业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "批发和零售业"
+    },
+    {
+      "name": "超市理货员",
+      "employment_source": "行业拆分(批发和零售业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "批发和零售业"
+    },
+    {
+      "name": "酒店前台",
+      "employment_source": "行业拆分(住宿和餐饮业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "住宿和餐饮业"
+    },
+    {
+      "name": "酒店管理人员",
+      "employment_source": "行业拆分(住宿和餐饮业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "住宿和餐饮业"
+    },
+    {
+      "name": "美容师",
+      "employment_source": "行业拆分(居民服务修理和其他服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "居民服务修理和其他服务业"
+    },
+    {
+      "name": "美发师",
+      "employment_source": "行业拆分(居民服务修理和其他服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "居民服务修理和其他服务业"
+    },
+    {
+      "name": "家政服务员",
+      "employment_source": "行业拆分(居民服务修理和其他服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "居民服务修理和其他服务业"
+    },
+    {
+      "name": "月嫂/育儿嫂",
+      "employment_source": "行业拆分(居民服务修理和其他服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "居民服务修理和其他服务业"
+    },
+    {
+      "name": "健身教练",
+      "employment_source": "行业拆分(居民服务修理和其他服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "居民服务修理和其他服务业"
+    },
+    {
+      "name": "房产经纪人",
+      "employment_source": "行业拆分(房地产业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "房地产业"
+    },
+    {
+      "name": "搬运工/搬家工",
+      "employment_source": "行业拆分(居民服务修理和其他服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "居民服务修理和其他服务业"
+    },
+    {
+      "name": "保安",
+      "employment_source": "行业拆分(居民服务修理和其他服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "居民服务修理和其他服务业"
+    },
+    {
+      "name": "物业管理员",
+      "employment_source": "行业拆分(房地产业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "房地产业"
+    },
+    {
+      "name": "婚庆策划师",
+      "employment_source": "行业拆分(居民服务修理和其他服务业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "居民服务修理和其他服务业"
+    },
+    {
+      "name": "煤矿工人",
+      "employment_source": "行业拆分(采矿业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "采矿业"
+    },
+    {
+      "name": "石油钻井工",
+      "employment_source": "行业拆分(采矿业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "采矿业"
+    },
+    {
+      "name": "电力工程师",
+      "employment_source": "行业拆分(电力热力燃气及水生产和供应业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "电力热力燃气及水生产和供应业"
+    },
+    {
+      "name": "电网维护电工",
+      "employment_source": "行业拆分(电力热力燃气及水生产和供应业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "电力热力燃气及水生产和供应业"
+    },
+    {
+      "name": "新能源技术员",
+      "employment_source": "行业拆分(电力热力燃气及水生产和供应业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "电力热力燃气及水生产和供应业"
+    },
+    {
+      "name": "环保工程师",
+      "employment_source": "行业拆分(水利环境和公共设施管理业)",
+      "salary_source": "行业平均×职业系数",
+      "industry": "水利环境和公共设施管理业"
+    }
+  ]
+}
