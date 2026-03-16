@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 对美国就业市场的影响</title>
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg: #0a0a0f;
+            --bg2: #12121a;
+            --fg: #e0e0e8;
+            --fg2: #888894;
+            --sidebar-w: 240px;
+        }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--bg2);
+            border-right: 1px solid rgba(255,255,255,0.06);
+            padding: 20px 18px;
+            z-index: 10;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        #sidebar h1 {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+        #sidebar .subtitle {
+            font-size: 11px;
+            color: var(--fg2);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        #sidebar .subtitle a {
+            color: var(--fg2);
+        }
+        .stat-section {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .stat-section h3 {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--fg2);
+        }
+        .stat-big {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: var(--fg2);
+        }
+        .tier-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .tier-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+        .tier-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .tier-name {
+            flex: 1;
+            color: var(--fg2);
+        }
+        .tier-jobs {
+            text-align: right;
+            white-space: nowrap;
+        }
+        .tier-pct {
+            text-align: right;
+            width: 32px;
+            color: var(--fg2);
+            font-size: 10px;
+        }
+        .histogram {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 48px;
+        }
+        .histogram .bar {
+            flex: 1;
+            border-radius: 1px 1px 0 0;
+            min-height: 1px;
+            position: relative;
+        }
+        .hist-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            color: var(--fg2);
+            margin-top: 2px;
+        }
+        .hbar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .hbar-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+        .hbar-label {
+            width: 80px;
+            flex-shrink: 0;
+            color: var(--fg2);
+            font-size: 10px;
+            text-align: right;
+        }
+        .hbar-track {
+            flex: 1;
+            height: 10px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .hbar-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+        .hbar-val {
+            width: 22px;
+            flex-shrink: 0;
+            font-size: 10px;
+            color: var(--fg);
+            text-align: right;
+        }
+        .gradient-legend {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: var(--fg2);
+        }
+        .gradient-legend canvas {
+            border-radius: 2px;
+        }
+        canvas#canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-w);
+            cursor: default;
+        }
+        #tooltip {
+            position: fixed;
+            pointer-events: none;
+            background: var(--bg2);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 13px;
+            line-height: 1.5;
+            max-width: 380px;
+            opacity: 0;
+            transition: opacity 0.12s;
+            z-index: 20;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+        }
+        #tooltip.visible {
+            opacity: 1;
+        }
+        #tooltip .tt-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+            color: #fff;
+        }
+        #tooltip .tt-title-en {
+            font-size: 11px;
+            color: var(--fg2);
+            margin-bottom: 6px;
+        }
+        #tooltip .tt-exposure {
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        #tooltip .tt-stats {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 2px 12px;
+            font-size: 12px;
+        }
+        #tooltip .tt-stats .label {
+            color: var(--fg2);
+        }
+        #tooltip .tt-stats .value {
+            color: var(--fg);
+            text-align: right;
+        }
+        #tooltip .tt-rationale {
+            font-size: 11px;
+            color: var(--fg2);
+            margin-top: 8px;
+            line-height: 1.4;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div>
+            <h1>AI 对美国就业市场的影响</h1>
+            <p class="subtitle">
+                342 个职业 · 面积 = 就业人数 · 颜色 = AI 影响程度<br>
+                数据来自 <a href="https://www.bls.gov/ooh/">BLS</a>，由 Gemini Flash 评分<br>
+                原版 <a href="https://github.com/karpathy/jobs">GitHub</a> · <a href="https://joshkale.github.io/jobs/">英文版</a>
+            </p>
+        </div>
+        <div class="stat-section">
+            <h3>总就业人数</h3>
+            <div class="stat-big" id="statTotalJobs">&mdash;</div>
+        </div>
+        <div class="stat-section">
+            <h3>加权平均影响度</h3>
+            <div class="stat-big" id="statAvgExposure">&mdash;</div>
+            <p class="stat-label">按就业人数加权，0-10 分制</p>
+        </div>
+        <div class="stat-section">
+            <h3>按影响度分布的就业人数</h3>
+            <div class="histogram" id="histogram"></div>
+            <div class="hist-labels">
+                <span>0</span>
+                <span>5</span>
+                <span>10</span>
+            </div>
+        </div>
+        <div class="stat-section">
+            <h3>分级统计</h3>
+            <div class="tier-bar" id="tierBar"></div>
+        </div>
+        <div class="stat-section">
+            <h3>按薪资的影响度</h3>
+            <div class="hbar-chart" id="payChart"></div>
+        </div>
+        <div class="stat-section">
+            <h3>按学历的影响度</h3>
+            <div class="hbar-chart" id="eduChart"></div>
+        </div>
+        <div class="stat-section">
+            <h3>受影响的薪资总额</h3>
+            <div class="stat-big" id="statWages">&mdash;</div>
+            <p class="stat-label">高影响职业（7+）的年薪资总额</p>
+        </div>
+        <div class="stat-section">
+            <p class="stat-label">
+                <span style="color: var(--fg2);">低</span>
+                <canvas id="gradientLegend" width="80" height="8" style="vertical-align: middle; margin: 0 4px;"></canvas>
+                <span style="color: var(--fg2);">高</span>
+            </p>
+        </div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+    <div id="tooltip">
+        <div class="tt-title"></div>
+        <div class="tt-title-en"></div>
+        <div class="tt-exposure"></div>
+        <div class="tt-stats"></div>
+        <div class="tt-rationale"></div>
+    </div>
+
+    <script>
+        function exposureColor(score) {
+            if (score == null) return [128, 128, 128];
+            const t = Math.max(0, Math.min(10, score)) / 10;
+            let r, g, b;
+            if (t < 0.5) {
+                const s = t / 0.5;
+                r = Math.round(50 + s * 180);
+                g = Math.round(160 - s * 10);
+                b = Math.round(50 - s * 20);
+            } else {
+                const s = (t - 0.5) / 0.5;
+                r = Math.round(230 + s * 25);
+                g = Math.round(150 - s * 110);
+                b = Math.round(30 - s * 10);
+            }
+            return [r, g, b];
+        }
+
+        function exposureColorCSS(score, alpha) {
+            const [r, g, b] = exposureColor(score);
+            return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+        }
+
+        function squarify(items, x, y, w, h) {
+            if (items.length === 0) return [];
+            if (items.length === 1) {
+                return [Object.assign({}, items[0], { rx: x, ry: y, rw: w, rh: h })];
+            }
+            var total = items.reduce(function(s, d) { return s + d.value; }, 0);
+            if (total === 0) return [];
+            var results = [];
+            var remaining = items.slice();
+            var cx = x, cy = y, cw = w, ch = h;
+            while (remaining.length > 0) {
+                var remTotal = remaining.reduce(function(s, d) { return s + d.value; }, 0);
+                var vertical = cw >= ch;
+                var side = vertical ? ch : cw;
+                var row = [remaining[0]];
+                var rowSum = remaining[0].value;
+                for (var i = 1; i < remaining.length; i++) {
+                    var candidate = row.concat([remaining[i]]);
+                    var candidateSum = rowSum + remaining[i].value;
+                    if (worstAspect(candidate, candidateSum, side, remTotal, vertical ? cw : ch) < worstAspect(row, rowSum, side, remTotal, vertical ? cw : ch)) {
+                        row = candidate;
+                        rowSum = candidateSum;
+                    } else {
+                        break;
+                    }
+                }
+                var rowFraction = rowSum / remTotal;
+                var rowThickness = vertical ? cw * rowFraction : ch * rowFraction;
+                var offset = 0;
+                for (var j = 0; j < row.length; j++) {
+                    var item = row[j];
+                    var itemFraction = item.value / rowSum;
+                    var itemLength = side * itemFraction;
+                    if (vertical) {
+                        results.push(Object.assign({}, item, { rx: cx, ry: cy + offset, rw: rowThickness, rh: itemLength }));
+                    } else {
+                        results.push(Object.assign({}, item, { rx: cx + offset, ry: cy, rw: itemLength, rh: rowThickness }));
+                    }
+                    offset += itemLength;
+                }
+                if (vertical) {
+                    cx += rowThickness;
+                    cw -= rowThickness;
+                } else {
+                    cy += rowThickness;
+                    ch -= rowThickness;
+                }
+                remaining = remaining.slice(row.length);
+            }
+            return results;
+        }
+
+        function worstAspect(row, rowSum, side, totalArea, availableExtent) {
+            var rowExtent = availableExtent * (rowSum / totalArea);
+            if (rowExtent === 0) return Infinity;
+            var worst = 0;
+            for (var i = 0; i < row.length; i++) {
+                var itemLen = side * (row[i].value / rowSum);
+                if (itemLen === 0) continue;
+                var aspect = Math.max(rowExtent / itemLen, itemLen / rowExtent);
+                if (aspect > worst) worst = aspect;
+            }
+            return worst;
+        }
+
+        var data = [];
+        var rects = [];
+        var hovered = null;
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var dpr = window.devicePixelRatio || 1;
+        var MARGIN = 12;
+        var GAP = 1.5;
+
+        function layout() {
+            var sidebarW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-w'));
+            var w = (window.innerWidth - sidebarW);
+            var h = window.innerHeight;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + "px";
+            canvas.style.height = h + "px";
+            var tx = MARGIN;
+            var ty = MARGIN;
+            var tw = w - MARGIN * 2;
+            var th = h - MARGIN * 2;
+            var byCategory = {};
+            for (var i = 0; i < data.length; i++) {
+                var d = data[i];
+                var cat = d.category;
+                if (!byCategory[cat]) byCategory[cat] = [];
+                byCategory[cat].push(d);
+            }
+            var categories = Object.keys(byCategory).map(function(cat) {
+                return {
+                    cat: cat,
+                    items: byCategory[cat].sort(function(a, b) { return (b.jobs || 0) - (a.jobs || 0); }),
+                    value: byCategory[cat].reduce(function(s, d) { return s + (d.jobs || 1); }, 0)
+                };
+            }).sort(function(a, b) { return b.value - a.value; });
+            var catRects = squarify(categories, tx, ty, tw, th);
+            rects = [];
+            for (var ci = 0; ci < catRects.length; ci++) {
+                var cr = catRects[ci];
+                var innerGap = GAP;
+                var items = cr.items.map(function(d) { return Object.assign({}, d, { value: d.jobs || 1 }); });
+                var innerRects = squarify(items, cr.rx + innerGap, cr.ry + innerGap, cr.rw - innerGap * 2, cr.rh - innerGap * 2);
+                for (var ri = 0; ri < innerRects.length; ri++) {
+                    rects.push(innerRects[ri]);
+                }
+            }
+        }
+
+        function draw() {
+            var w = canvas.width;
+            var h = canvas.height;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.fillStyle = "#0a0a0f";
+            ctx.fillRect(0, 0, w / dpr, h / dpr);
+            for (var i = 0; i < rects.length; i++) {
+                var r = rects[i];
+                var isHovered = r === hovered;
+                var g = GAP / 2;
+                var rx = r.rx + g;
+                var ry = r.ry + g;
+                var rw = r.rw - g * 2;
+                var rh = r.rh - g * 2;
+                if (rw <= 0 || rh <= 0) continue;
+                var fillAlpha = isHovered ? 0.8 : 0.5;
+                ctx.fillStyle = exposureColorCSS(r.exposure, fillAlpha);
+                ctx.fillRect(rx, ry, rw, rh);
+                if (isHovered) {
+                    ctx.strokeStyle = "#fff";
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(rx, ry, rw, rh);
+                }
+                var minW = 50;
+                var minH = 18;
+                if (rw > minW && rh > minH) {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(rx + 4, ry + 2, rw - 8, rh - 4);
+                    ctx.clip();
+                    var fontSize = Math.min(13, Math.max(9, Math.min(rw / 10, rh / 3)));
+                    ctx.font = "500 " + fontSize + 'px -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif';
+                    ctx.fillStyle = isHovered ? "#fff" : "rgba(255,255,255,0.85)";
+                    ctx.textBaseline = "top";
+                    ctx.fillText(r.title, rx + 5, ry + 4);
+                    if (rh > 34 && rw > 60) {
+                        var info = (r.exposure != null ? r.exposure + "/10" : "") + (r.jobs ? " · " + formatNumber(r.jobs) + " 人" : "");
+                        ctx.font = "400 " + Math.max(8, fontSize - 2) + 'px -apple-system, "PingFang SC", system-ui, sans-serif';
+                        ctx.fillStyle = "rgba(255,255,255,0.5)";
+                        ctx.fillText(info, rx + 5, ry + 4 + fontSize + 2);
+                    }
+                    ctx.restore();
+                }
+            }
+        }
+
+        function hitTest(mx, my) {
+            var sidebarW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-w'));
+            var cx = mx - sidebarW;
+            var cy = my;
+            for (var i = rects.length - 1; i >= 0; i--) {
+                var r = rects[i];
+                if (cx >= r.rx && cx < r.rx + r.rw && cy >= r.ry && cy < r.ry + r.rh) {
+                    return r;
+                }
+            }
+            return null;
+        }
+
+        function formatNumber(n) {
+            if (n == null) return "\u2014";
+            if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
+            if (n >= 1000) return Math.round(n / 1000) + "K";
+            return n.toLocaleString();
+        }
+
+        function formatPay(n) {
+            if (n == null) return "\u2014";
+            return "$" + n.toLocaleString();
+        }
+
+        var EDU_MAP = {
+            "No formal educational credential": "\u65e0\u6b63\u5f0f\u5b66\u5386",
+            "High school diploma or equivalent": "\u9ad8\u4e2d",
+            "Postsecondary nondegree award": "\u5927\u4e13\uff08\u975e\u5b66\u4f4d\uff09",
+            "Some college, no degree": "\u90e8\u5206\u5927\u5b66\u8bfe\u7a0b",
+            "Associate's degree": "\u526f\u5b66\u58eb",
+            "Bachelor's degree": "\u672c\u79d1",
+            "Master's degree": "\u7855\u58eb",
+            "Doctoral or professional degree": "\u535a\u58eb/\u4e13\u4e1a\u5b66\u4f4d"
+        };
+
+        function escapeHtml(str) {
+            var div = document.createElement("div");
+            div.appendChild(document.createTextNode(str));
+            return div.textContent;
+        }
+
+        function showTooltip(d, mx, my) {
+            var tt = document.getElementById("tooltip");
+            tt.querySelector(".tt-title").textContent = d.title;
+            tt.querySelector(".tt-title-en").textContent = d.title_en || "";
+            var score = d.exposure != null ? d.exposure : null;
+            var exposureEl = tt.querySelector(".tt-exposure");
+            if (score != null) {
+                var barWidth = score * 10;
+                var color = exposureColorCSS(score, 1);
+                var barOuter = document.createElement("div");
+                barOuter.style.cssText = "margin-top:3px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;";
+                var barInner = document.createElement("div");
+                barInner.style.cssText = "height:100%;width:" + barWidth + "%;background:" + color + ";border-radius:2px;";
+                barOuter.appendChild(barInner);
+                var scoreSpan = document.createElement("span");
+                scoreSpan.style.cssText = "color:" + color + ";font-weight:600;";
+                scoreSpan.textContent = "AI \u5f71\u54cd\u5ea6: " + score + "/10";
+                exposureEl.textContent = "";
+                exposureEl.appendChild(scoreSpan);
+                exposureEl.appendChild(barOuter);
+            } else {
+                exposureEl.textContent = "";
+            }
+            var eduCN = EDU_MAP[d.education] || d.education || "\u2014";
+            var statsEl = tt.querySelector(".tt-stats");
+            statsEl.textContent = "";
+            var statsData = [
+                ["\u4e2d\u4f4d\u5e74\u85aa", formatPay(d.pay)],
+                ["\u5c31\u4e1a\u4eba\u6570 (2024)", formatNumber(d.jobs)],
+                ["\u5c31\u4e1a\u524d\u666f", (d.outlook != null ? d.outlook + "%" : "\u2014") + (d.outlook_desc ? " (" + d.outlook_desc + ")" : "")],
+                ["\u5b66\u5386\u8981\u6c42", eduCN]
+            ];
+            for (var i = 0; i < statsData.length; i++) {
+                var labelSpan = document.createElement("span");
+                labelSpan.className = "label";
+                labelSpan.textContent = statsData[i][0];
+                var valueSpan = document.createElement("span");
+                valueSpan.className = "value";
+                valueSpan.textContent = statsData[i][1];
+                statsEl.appendChild(labelSpan);
+                statsEl.appendChild(valueSpan);
+            }
+            tt.querySelector(".tt-rationale").textContent = d.exposure_rationale || "";
+            var pad = 16;
+            var txPos = mx + pad;
+            var tyPos = my - pad;
+            if (txPos + 380 > window.innerWidth) txPos = mx - 380 - pad;
+            if (tyPos < 10) tyPos = my + pad;
+            if (tyPos + 200 > window.innerHeight) tyPos = my - 200;
+            tt.style.left = txPos + "px";
+            tt.style.top = tyPos + "px";
+            tt.classList.add("visible");
+        }
+
+        function hideTooltip() {
+            document.getElementById("tooltip").classList.remove("visible");
+        }
+
+        function computeStats() {
+            var totalJobs = data.reduce(function(s, d) { return s + (d.jobs || 0); }, 0);
+            var weightedSum = 0, weightedCount = 0;
+            for (var i = 0; i < data.length; i++) {
+                var d = data[i];
+                if (d.exposure != null && d.jobs) {
+                    weightedSum += d.exposure * d.jobs;
+                    weightedCount += d.jobs;
+                }
+            }
+            var weightedAvg = weightedCount > 0 ? weightedSum / weightedCount : 0;
+
+            var histogram = [];
+            for (var hi = 0; hi < 11; hi++) histogram.push(0);
+            for (var di = 0; di < data.length; di++) {
+                if (data[di].exposure != null && data[di].jobs) {
+                    histogram[data[di].exposure] += data[di].jobs;
+                }
+            }
+
+            var tiers = [
+                { name: "\u6781\u4f4e", range: [0, 1], color: exposureColorCSS(0.5, 1) },
+                { name: "\u4f4e", range: [2, 3], color: exposureColorCSS(2.5, 1) },
+                { name: "\u4e2d\u7b49", range: [4, 5], color: exposureColorCSS(4.5, 1) },
+                { name: "\u9ad8", range: [6, 7], color: exposureColorCSS(6.5, 1) },
+                { name: "\u6781\u9ad8", range: [8, 10], color: exposureColorCSS(9, 1) }
+            ];
+            for (var ti = 0; ti < tiers.length; ti++) {
+                tiers[ti].jobs = 0;
+                for (var tdi = 0; tdi < data.length; tdi++) {
+                    if (data[tdi].exposure != null && data[tdi].jobs && data[tdi].exposure >= tiers[ti].range[0] && data[tdi].exposure <= tiers[ti].range[1]) {
+                        tiers[ti].jobs += data[tdi].jobs;
+                    }
+                }
+                tiers[ti].pct = totalJobs > 0 ? (tiers[ti].jobs / totalJobs * 100) : 0;
+            }
+
+            var wagesExposed = 0;
+            for (var wi = 0; wi < data.length; wi++) {
+                if (data[wi].exposure != null && data[wi].exposure >= 7 && data[wi].jobs && data[wi].pay) {
+                    wagesExposed += data[wi].jobs * data[wi].pay;
+                }
+            }
+
+            document.getElementById("statTotalJobs").textContent = (totalJobs / 1e6).toFixed(0) + "M";
+
+            var avgEl = document.getElementById("statAvgExposure");
+            var avgSpan = document.createElement("span");
+            avgSpan.style.color = exposureColorCSS(weightedAvg, 1);
+            avgSpan.textContent = weightedAvg.toFixed(1);
+            avgEl.textContent = "";
+            avgEl.appendChild(avgSpan);
+
+            var maxHist = Math.max.apply(null, histogram);
+            var histEl = document.getElementById("histogram");
+            histEl.textContent = "";
+            for (var hbi = 0; hbi < histogram.length; hbi++) {
+                var hPct = maxHist > 0 ? (histogram[hbi] / maxHist * 100) : 0;
+                var bar = document.createElement("div");
+                bar.className = "bar";
+                bar.style.height = Math.max(2, hPct) + "%";
+                bar.style.background = exposureColorCSS(hbi, 0.7);
+                bar.title = hbi + ": " + formatNumber(histogram[hbi]) + " \u4eba";
+                histEl.appendChild(bar);
+            }
+
+            var tierEl = document.getElementById("tierBar");
+            tierEl.textContent = "";
+            for (var tri = 0; tri < tiers.length; tri++) {
+                var t = tiers[tri];
+                var tierRow = document.createElement("div");
+                tierRow.className = "tier-row";
+                tierRow.innerHTML = '<div class="tier-color" style="background:' + escapeHtml(t.color) + '"></div>'
+                    + '<span class="tier-name">' + escapeHtml(t.name) + ' (' + t.range[0] + '-' + t.range[1] + ')</span>'
+                    + '<span class="tier-jobs">' + escapeHtml(formatNumber(t.jobs)) + '</span>'
+                    + '<span class="tier-pct">' + t.pct.toFixed(0) + '%</span>';
+                tierEl.appendChild(tierRow);
+            }
+
+            var payBands = [
+                { label: "<$35K", min: 0, max: 35000 },
+                { label: "$35-50K", min: 35000, max: 50000 },
+                { label: "$50-75K", min: 50000, max: 75000 },
+                { label: "$75-100K", min: 75000, max: 100000 },
+                { label: "$100K+", min: 100000, max: Infinity }
+            ];
+            var payChartEl = document.getElementById("payChart");
+            payChartEl.textContent = "";
+            for (var pi = 0; pi < payBands.length; pi++) {
+                var band = payBands[pi];
+                var pwSum = 0, pwCount = 0;
+                for (var pdi = 0; pdi < data.length; pdi++) {
+                    if (data[pdi].exposure != null && data[pdi].jobs && data[pdi].pay != null && data[pdi].pay >= band.min && data[pdi].pay < band.max) {
+                        pwSum += data[pdi].exposure * data[pdi].jobs;
+                        pwCount += data[pdi].jobs;
+                    }
+                }
+                var pavg = pwCount > 0 ? pwSum / pwCount : 0;
+                var ppct = pavg / 10 * 100;
+                var prow = document.createElement("div");
+                prow.className = "hbar-row";
+                var plabel = document.createElement("span");
+                plabel.className = "hbar-label";
+                plabel.textContent = band.label;
+                var ptrack = document.createElement("div");
+                ptrack.className = "hbar-track";
+                var pfill = document.createElement("div");
+                pfill.className = "hbar-fill";
+                pfill.style.width = ppct + "%";
+                pfill.style.background = exposureColorCSS(pavg, 0.8);
+                ptrack.appendChild(pfill);
+                var pval = document.createElement("span");
+                pval.className = "hbar-val";
+                pval.textContent = pavg.toFixed(1);
+                prow.appendChild(plabel);
+                prow.appendChild(ptrack);
+                prow.appendChild(pval);
+                payChartEl.appendChild(prow);
+            }
+
+            var eduGroups = [
+                { label: "\u65e0\u5b66\u5386/\u9ad8\u4e2d", match: ["No formal educational credential", "High school diploma or equivalent"] },
+                { label: "\u5927\u4e13/\u526f\u5b66\u58eb", match: ["Postsecondary nondegree award", "Some college, no degree", "Associate's degree"] },
+                { label: "\u672c\u79d1", match: ["Bachelor's degree"] },
+                { label: "\u7855\u58eb", match: ["Master's degree"] },
+                { label: "\u535a\u58eb/\u4e13\u4e1a", match: ["Doctoral or professional degree"] }
+            ];
+            var eduChartEl = document.getElementById("eduChart");
+            eduChartEl.textContent = "";
+            for (var ei = 0; ei < eduGroups.length; ei++) {
+                var grp = eduGroups[ei];
+                var ewSum = 0, ewCount = 0;
+                for (var edi = 0; edi < data.length; edi++) {
+                    if (data[edi].exposure != null && data[edi].jobs && grp.match.indexOf(data[edi].education) !== -1) {
+                        ewSum += data[edi].exposure * data[edi].jobs;
+                        ewCount += data[edi].jobs;
+                    }
+                }
+                var eavg = ewCount > 0 ? ewSum / ewCount : 0;
+                var epct = eavg / 10 * 100;
+                var erow = document.createElement("div");
+                erow.className = "hbar-row";
+                var elabel = document.createElement("span");
+                elabel.className = "hbar-label";
+                elabel.textContent = grp.label;
+                var etrack = document.createElement("div");
+                etrack.className = "hbar-track";
+                var efill = document.createElement("div");
+                efill.className = "hbar-fill";
+                efill.style.width = epct + "%";
+                efill.style.background = exposureColorCSS(eavg, 0.8);
+                etrack.appendChild(efill);
+                var eval2 = document.createElement("span");
+                eval2.className = "hbar-val";
+                eval2.textContent = eavg.toFixed(1);
+                erow.appendChild(elabel);
+                erow.appendChild(etrack);
+                erow.appendChild(eval2);
+                eduChartEl.appendChild(erow);
+            }
+
+            var trillions = wagesExposed / 1e12;
+            document.getElementById("statWages").textContent = "$" + trillions.toFixed(1) + "T";
+        }
+
+        canvas.addEventListener("mousemove", function(e) {
+            var hit = hitTest(e.clientX, e.clientY);
+            if (hit !== hovered) {
+                hovered = hit;
+                draw();
+            }
+            if (hovered) {
+                showTooltip(hovered, e.clientX, e.clientY);
+                canvas.style.cursor = "pointer";
+            } else {
+                hideTooltip();
+                canvas.style.cursor = "default";
+            }
+        });
+
+        canvas.addEventListener("click", function(e) {
+            var hit = hitTest(e.clientX, e.clientY);
+            if (hit && hit.url) {
+                window.open(hit.url, "_blank");
+            }
+        });
+
+        canvas.addEventListener("mouseleave", function() {
+            hovered = null;
+            hideTooltip();
+            draw();
+        });
+
+        function resize() {
+            dpr = window.devicePixelRatio || 1;
+            layout();
+            draw();
+        }
+
+        function drawGradientLegend() {
+            var c = document.getElementById("gradientLegend");
+            var gctx = c.getContext("2d");
+            for (var x = 0; x < 80; x++) {
+                var score = (x / 79) * 10;
+                gctx.fillStyle = exposureColorCSS(score, 1);
+                gctx.fillRect(x, 0, 1, 8);
+            }
+        }
+
+        fetch("data.json")
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                data = d;
+                computeStats();
+                drawGradientLegend();
+                resize();
+            });
+
+        window.addEventListener("resize", resize);
+    </script>
+</body>
+</html>

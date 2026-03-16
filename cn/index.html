@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 对中国就业市场的冲击</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg2: #12121a;
+  --fg: #e0e0e8;
+  --fg2: #888894;
+  --sidebar-w: 220px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg2);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  padding: 20px 18px;
+  z-index: 10;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.08) transparent;
+}
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-track { background: transparent; }
+#sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+#sidebar h1 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+#sidebar .subtitle {
+  font-size: 11px;
+  color: var(--fg2);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+#sidebar .subtitle a { color: var(--fg2); }
+
+/* Mode toggle */
+.mode-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.mode-toggle button {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--fg2);
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.mode-toggle button:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--fg);
+}
+.mode-toggle button.active {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.2);
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.stat-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stat-section h3 {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg2);
+}
+.stat-big {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--fg2);
+}
+
+.tier-bar { display: flex; flex-direction: column; gap: 4px; }
+.tier-row { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+.tier-color { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.tier-name { flex: 1; color: var(--fg2); }
+.tier-jobs { text-align: right; white-space: nowrap; }
+.tier-pct { text-align: right; width: 32px; color: var(--fg2); font-size: 10px; }
+
+.histogram { display: flex; align-items: flex-end; gap: 2px; height: 48px; }
+.histogram .bar { flex: 1; border-radius: 1px 1px 0 0; min-height: 1px; }
+.hist-labels { display: flex; justify-content: space-between; font-size: 9px; color: var(--fg2); margin-top: 2px; }
+
+.hbar-chart { display: flex; flex-direction: column; gap: 4px; }
+.hbar-row { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+.hbar-label { width: 68px; flex-shrink: 0; color: var(--fg2); font-size: 10px; text-align: right; }
+.hbar-track { flex: 1; height: 10px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; }
+.hbar-fill { height: 100%; border-radius: 2px; }
+.hbar-val { width: 22px; flex-shrink: 0; font-size: 10px; color: var(--fg); text-align: right; }
+
+.gradient-legend { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--fg2); }
+.gradient-legend canvas { border-radius: 2px; }
+
+canvas#canvas {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-w);
+  cursor: default;
+}
+
+#tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 340px;
+  opacity: 0;
+  transition: opacity 0.12s;
+  z-index: 20;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+#tooltip.visible { opacity: 1; }
+#tooltip .tt-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; color: #fff; }
+#tooltip .tt-exposure { font-size: 12px; margin-bottom: 8px; }
+#tooltip .tt-stats { display: grid; grid-template-columns: auto auto; gap: 2px 12px; font-size: 12px; }
+#tooltip .tt-stats .label { color: var(--fg2); }
+#tooltip .tt-stats .value { color: var(--fg); text-align: right; }
+#tooltip .tt-rationale { font-size: 11px; color: var(--fg2); margin-top: 8px; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div>
+    <h1>AI 对中国就业市场的冲击</h1>
+    <div class="subtitle">147 个职业 · 面积 = 就业人数 · 颜色 = AI 暴露程度<br>数据来源：<a href="https://www.stats.gov.cn/">国家统计局</a>等，由 Claude 评分<br><a href="https://github.com/karpathy/jobs">GitHub</a></div>
+  </div>
+
+  <div class="stat-section">
+    <h3>面积表示</h3>
+    <div class="mode-toggle" id="modeToggle">
+      <button data-mode="employment" class="active">就业人数</button>
+      <button data-mode="wages">薪资总额（人数 × 年薪）</button>
+      <button data-mode="gdp">行业产值（GDP 贡献）</button>
+    </div>
+  </div>
+
+  <div class="stat-section">
+    <h3 id="statTotalLabel">总就业人数</h3>
+    <div class="stat-big" id="statTotalJobs">—</div>
+  </div>
+
+  <div class="stat-section">
+    <h3>加权平均暴露分数</h3>
+    <div class="stat-big" id="statAvgExposure">—</div>
+    <div class="stat-label">按面积加权，0–10 分</div>
+  </div>
+
+  <div class="stat-section">
+    <h3 id="histLabel">就业人数按暴露分数分布</h3>
+    <div class="histogram" id="histogram"></div>
+    <div class="hist-labels"><span>0</span><span>5</span><span>10</span></div>
+  </div>
+
+  <div class="stat-section">
+    <h3>分级概览</h3>
+    <div class="tier-bar" id="tierBar"></div>
+  </div>
+
+  <div class="stat-section">
+    <h3>按薪资水平</h3>
+    <div class="hbar-chart" id="payChart"></div>
+  </div>
+
+  <div class="stat-section">
+    <h3>按学历水平</h3>
+    <div class="hbar-chart" id="eduChart"></div>
+  </div>
+
+  <div class="stat-section">
+    <h3>高暴露总额</h3>
+    <div class="stat-big" id="statWages">—</div>
+    <div class="stat-label">暴露分数 ≥7 的职业</div>
+  </div>
+
+  <div class="gradient-legend">
+    <span>低</span>
+    <canvas id="gradientLegend" width="80" height="8"></canvas>
+    <span>高</span>
+  </div>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<div id="tooltip">
+  <div class="tt-title"></div>
+  <div class="tt-exposure"></div>
+  <div class="tt-stats"></div>
+  <div class="tt-rationale"></div>
+</div>
+
+<script>
+
+// ── 行业增加值 GDP（2023年，亿元）来源：国家统计局 ──
+
+const INDUSTRY_GDP = {
+  "农林牧渔业": 94463,
+  "采矿业": 28000,
+  "制造业": 330028,
+  "电力热力燃气及水生产和供应业": 41075,
+  "建筑业": 85691,
+  "批发和零售业": 123072,
+  "交通运输仓储和邮政业": 57820,
+  "住宿和餐饮业": 21024,
+  "信息传输软件和信息技术服务业": 55194,
+  "金融业": 100677,
+  "房地产业": 73723,
+  "租赁和商务服务业": 44347,
+  "科学研究和技术服务业": 37000,
+  "水利环境和公共设施管理业": 9000,
+  "居民服务修理和其他服务业": 22000,
+  "教育": 42000,
+  "卫生和社会工作": 30000,
+  "文化体育和娱乐业": 14000,
+  "公共管理社会保障和社会组织": 51469,
+};
+
+// ── Mode state ──
+
+let currentMode = "employment"; // "employment" | "wages" | "gdp"
+
+// ── Color scale ──
+
+function exposureColor(score) {
+  if (score == null) return [128, 128, 128];
+  const t = Math.max(0, Math.min(10, score)) / 10;
+  let r, g, b;
+  if (t < 0.5) {
+    const s = t / 0.5;
+    r = Math.round(50 + s * 180);
+    g = Math.round(160 - s * 10);
+    b = Math.round(50 - s * 20);
+  } else {
+    const s = (t - 0.5) / 0.5;
+    r = Math.round(230 + s * 25);
+    g = Math.round(150 - s * 110);
+    b = Math.round(30 - s * 10);
+  }
+  return [r, g, b];
+}
+
+function exposureColorCSS(score, alpha) {
+  const [r, g, b] = exposureColor(score);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ── Squarified treemap layout ──
+
+function squarify(items, x, y, w, h) {
+  if (items.length === 0) return [];
+  if (items.length === 1) return [{ ...items[0], rx: x, ry: y, rw: w, rh: h }];
+  const total = items.reduce((s, d) => s + d.value, 0);
+  if (total === 0) return [];
+  const results = [];
+  let remaining = [...items];
+  let cx = x, cy = y, cw = w, ch = h;
+  while (remaining.length > 0) {
+    const remTotal = remaining.reduce((s, d) => s + d.value, 0);
+    const vertical = cw >= ch;
+    const side = vertical ? ch : cw;
+    let row = [remaining[0]], rowSum = remaining[0].value;
+    for (let i = 1; i < remaining.length; i++) {
+      const candidate = [...row, remaining[i]];
+      const candidateSum = rowSum + remaining[i].value;
+      if (worstAspect(candidate, candidateSum, side, remTotal, vertical ? cw : ch) <
+          worstAspect(row, rowSum, side, remTotal, vertical ? cw : ch)) {
+        row = candidate; rowSum = candidateSum;
+      } else break;
+    }
+    const rowThickness = (vertical ? cw : ch) * (rowSum / remTotal);
+    let offset = 0;
+    for (const item of row) {
+      const itemLength = side * (item.value / rowSum);
+      if (vertical) results.push({ ...item, rx: cx, ry: cy + offset, rw: rowThickness, rh: itemLength });
+      else results.push({ ...item, rx: cx + offset, ry: cy, rw: itemLength, rh: rowThickness });
+      offset += itemLength;
+    }
+    if (vertical) { cx += rowThickness; cw -= rowThickness; }
+    else { cy += rowThickness; ch -= rowThickness; }
+    remaining = remaining.slice(row.length);
+  }
+  return results;
+}
+
+function worstAspect(row, rowSum, side, totalArea, availableExtent) {
+  const rowExtent = availableExtent * (rowSum / totalArea);
+  if (rowExtent === 0) return Infinity;
+  let worst = 0;
+  for (const item of row) {
+    const itemLen = side * (item.value / rowSum);
+    if (itemLen === 0) continue;
+    const aspect = Math.max(rowExtent / itemLen, itemLen / rowExtent);
+    if (aspect > worst) worst = aspect;
+  }
+  return worst;
+}
+
+// ── getValue for each mode ──
+
+function getIndustryTotalEmp(industry) {
+  let total = 0;
+  for (const d of data) {
+    if (d.industry === industry) total += d.employment;
+  }
+  return total;
+}
+
+// Cache industry totals
+let industryEmpCache = {};
+function buildIndustryCache() {
+  industryEmpCache = {};
+  for (const d of data) {
+    industryEmpCache[d.industry] = (industryEmpCache[d.industry] || 0) + d.employment;
+  }
+}
+
+function getValue(d) {
+  if (currentMode === "employment") return d.employment || 1;
+  if (currentMode === "wages") return (d.employment || 0) * (d.salary || 0); // 万人·万元=亿元
+  if (currentMode === "gdp") {
+    const indGDP = INDUSTRY_GDP[d.industry] || 0;
+    const indEmp = industryEmpCache[d.industry] || 1;
+    return indGDP * ((d.employment || 0) / indEmp); // 亿元
+  }
+  return d.employment || 1;
+}
+
+// ── Rendering ──
+
+let data = [];
+let rects = [];
+let hovered = null;
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let dpr = window.devicePixelRatio || 1;
+const MARGIN = 12;
+const GAP = 1.5;
+
+function layout() {
+  const sidebarW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-w'));
+  const w = window.innerWidth - sidebarW;
+  const h = window.innerHeight;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + "px";
+  canvas.style.height = h + "px";
+
+  const tx = MARGIN, ty = MARGIN;
+  const tw = w - MARGIN * 2, th = h - MARGIN * 2;
+
+  const byCategory = {};
+  for (const d of data) {
+    if (!byCategory[d.category]) byCategory[d.category] = [];
+    byCategory[d.category].push(d);
+  }
+
+  const categories = Object.keys(byCategory).map(cat => ({
+    cat,
+    items: byCategory[cat].sort((a, b) => getValue(b) - getValue(a)),
+    value: byCategory[cat].reduce((s, d) => s + getValue(d), 0),
+  })).sort((a, b) => b.value - a.value);
+
+  const catRects = squarify(categories, tx, ty, tw, th);
+  rects = [];
+  for (const cr of catRects) {
+    const items = cr.items.map(d => ({ ...d, value: getValue(d) }));
+    const innerRects = squarify(items, cr.rx + GAP, cr.ry + GAP, cr.rw - GAP * 2, cr.rh - GAP * 2);
+    for (const ir of innerRects) rects.push(ir);
+  }
+}
+
+function draw() {
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = "#0a0a0f";
+  ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+
+  for (const r of rects) {
+    const isH = r === hovered;
+    const g = GAP / 2;
+    const rx = r.rx + g, ry = r.ry + g, rw = r.rw - g * 2, rh = r.rh - g * 2;
+    if (rw <= 0 || rh <= 0) continue;
+
+    ctx.fillStyle = exposureColorCSS(r.ai_score, isH ? 0.8 : 0.5);
+    ctx.fillRect(rx, ry, rw, rh);
+
+    if (isH) { ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(rx, ry, rw, rh); }
+
+    if (rw > 50 && rh > 18) {
+      ctx.save();
+      ctx.beginPath(); ctx.rect(rx + 4, ry + 2, rw - 8, rh - 4); ctx.clip();
+      const fontSize = Math.min(13, Math.max(9, Math.min(rw / 10, rh / 3)));
+      ctx.font = `500 ${fontSize}px -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif`;
+      ctx.fillStyle = isH ? "#fff" : "rgba(255,255,255,0.85)";
+      ctx.textBaseline = "top";
+      ctx.fillText(r.name, rx + 5, ry + 4);
+
+      if (rh > 34 && rw > 60) {
+        let info = r.ai_score + "/10";
+        const v = getValue(r);
+        if (currentMode === "employment") info += " \u00b7 " + formatWan(r.employment);
+        else info += " \u00b7 " + formatYi(v);
+        ctx.font = `400 ${Math.max(8, fontSize - 2)}px -apple-system, "PingFang SC", sans-serif`;
+        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.fillText(info, rx + 5, ry + 4 + fontSize + 2);
+      }
+      ctx.restore();
+    }
+  }
+}
+
+function hitTest(mx, my) {
+  const sidebarW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-w'));
+  const cx = mx - sidebarW, cy = my;
+  for (let i = rects.length - 1; i >= 0; i--) {
+    const r = rects[i];
+    if (cx >= r.rx && cx < r.rx + r.rw && cy >= r.ry && cy < r.ry + r.rh) return r;
+  }
+  return null;
+}
+
+function formatWan(n) {
+  if (n == null) return "\u2014";
+  if (n >= 10000) return (n / 10000).toFixed(1) + "\u4ebf";
+  return n.toLocaleString("zh-CN") + "\u4e07";
+}
+
+function formatYi(n) {
+  if (n == null) return "\u2014";
+  if (n >= 10000) return (n / 10000).toFixed(1) + "\u4e07\u4ebf";
+  if (n >= 1) return Math.round(n).toLocaleString("zh-CN") + "\u4ebf";
+  return (n * 10000).toFixed(0) + "\u4e07";
+}
+
+function formatWanYi(n) {
+  return (n / 10000).toFixed(1) + "\u4e07\u4ebf\u5143";
+}
+
+function showTooltip(d, mx, my) {
+  const tt = document.getElementById("tooltip");
+  tt.querySelector(".tt-title").textContent = d.name;
+
+  const score = d.ai_score;
+  const color = exposureColorCSS(score, 1);
+  tt.querySelector(".tt-exposure").innerHTML =
+    `<span style="color:${color};font-weight:600;">AI \u66b4\u9732\u8bc4\u5206\uff1a${score}/10</span>` +
+    `<div style="margin-top:3px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;">` +
+    `<div style="height:100%;width:${score * 10}%;background:${color};border-radius:2px;"></div></div>`;
+
+  const wageTotal = (d.employment || 0) * (d.salary || 0); // 亿元
+  const gdpShare = getValue(d);
+
+  tt.querySelector(".tt-stats").innerHTML = `
+    <span class="label">\u5c31\u4e1a\u4eba\u6570</span><span class="value">${formatWan(d.employment)}</span>
+    <span class="label">\u5e74\u85aa</span><span class="value">${d.salary}\u4e07\u5143</span>
+    <span class="label">\u85aa\u8d44\u603b\u989d</span><span class="value">${formatYi(wageTotal)}\u5143</span>
+    <span class="label">\u884c\u4e1a\u4ea7\u503c\u8d21\u732e</span><span class="value">${currentMode === "gdp" ? formatYi(gdpShare) + "\u5143" : "\u2014"}</span>
+    <span class="label">\u5c31\u4e1a\u524d\u666f</span><span class="value">${d.growth}</span>
+    <span class="label">\u5b66\u5386\u8981\u6c42</span><span class="value">${d.education}</span>
+  `;
+
+  tt.querySelector(".tt-rationale").textContent = d.rationale || "";
+
+  const pad = 16;
+  let tx = mx + pad, ty = my - pad;
+  if (tx + 340 > window.innerWidth) tx = mx - 340 - pad;
+  if (ty < 10) ty = my + pad;
+  if (ty + 240 > window.innerHeight) ty = my - 240;
+  tt.style.left = tx + "px";
+  tt.style.top = ty + "px";
+  tt.classList.add("visible");
+}
+
+function hideTooltip() {
+  document.getElementById("tooltip").classList.remove("visible");
+}
+
+// ── Sidebar stats ──
+
+function computeStats() {
+  const MODE_LABELS = {
+    employment: { total: "\u603b\u5c31\u4e1a\u4eba\u6570", hist: "\u5c31\u4e1a\u4eba\u6570\u6309\u66b4\u9732\u5206\u6570\u5206\u5e03" },
+    wages: { total: "\u85aa\u8d44\u603b\u989d", hist: "\u85aa\u8d44\u603b\u989d\u6309\u66b4\u9732\u5206\u6570\u5206\u5e03" },
+    gdp: { total: "GDP \u603b\u8d21\u732e", hist: "GDP \u8d21\u732e\u6309\u66b4\u9732\u5206\u6570\u5206\u5e03" },
+  };
+
+  document.getElementById("statTotalLabel").textContent = MODE_LABELS[currentMode].total;
+  document.getElementById("histLabel").textContent = MODE_LABELS[currentMode].hist;
+
+  // Update subtitle
+  const areaLabel = currentMode === "employment" ? "\u5c31\u4e1a\u4eba\u6570" :
+                    currentMode === "wages" ? "\u85aa\u8d44\u603b\u989d" : "\u884c\u4e1a\u4ea7\u503c";
+  document.querySelector(".subtitle").innerHTML =
+    `147 \u4e2a\u804c\u4e1a \u00b7 \u9762\u79ef = ${areaLabel} \u00b7 \u989c\u8272 = AI \u66b4\u9732\u7a0b\u5ea6<br>\u6570\u636e\u6765\u6e90\uff1a<a href="https://www.stats.gov.cn/">\u56fd\u5bb6\u7edf\u8ba1\u5c40</a>\u7b49\uff0c\u7531 Claude \u8bc4\u5206<br><a href="https://github.com/karpathy/jobs">GitHub</a>`;
+
+  // Total
+  let totalValue = 0;
+  for (const d of data) totalValue += getValue(d);
+
+  if (currentMode === "employment") {
+    document.getElementById("statTotalJobs").textContent = formatWan(totalValue);
+  } else {
+    document.getElementById("statTotalJobs").textContent = formatWanYi(totalValue);
+  }
+
+  // Weighted avg exposure
+  let wSum = 0, wCount = 0;
+  for (const d of data) {
+    const v = getValue(d);
+    if (d.ai_score != null) { wSum += d.ai_score * v; wCount += v; }
+  }
+  const wAvg = wCount > 0 ? wSum / wCount : 0;
+  document.getElementById("statAvgExposure").innerHTML =
+    `<span style="color:${exposureColorCSS(wAvg, 1)}">${wAvg.toFixed(1)}</span>`;
+
+  // Histogram
+  const histogram = new Array(11).fill(0);
+  for (const d of data) {
+    if (d.ai_score != null) histogram[d.ai_score] += getValue(d);
+  }
+  const maxHist = Math.max(...histogram);
+  document.getElementById("histogram").innerHTML = histogram.map((count, i) => {
+    const h = maxHist > 0 ? (count / maxHist * 100) : 0;
+    const label = currentMode === "employment" ? formatWan(count) : formatYi(count);
+    return `<div class="bar" style="height:${Math.max(2, h)}%;background:${exposureColorCSS(i, 0.7)}" title="${i}: ${label}"></div>`;
+  }).join("");
+
+  // Tiers
+  const tiers = [
+    { name: "\u6781\u4f4e (0-1)", range: [0, 1], color: exposureColorCSS(0.5, 1) },
+    { name: "\u4f4e (2-3)", range: [2, 3], color: exposureColorCSS(2.5, 1) },
+    { name: "\u4e2d\u7b49 (4-5)", range: [4, 5], color: exposureColorCSS(4.5, 1) },
+    { name: "\u9ad8 (6-7)", range: [6, 7], color: exposureColorCSS(6.5, 1) },
+    { name: "\u6781\u9ad8 (8-10)", range: [8, 10], color: exposureColorCSS(9, 1) },
+  ];
+  for (const tier of tiers) {
+    tier.total = 0;
+    for (const d of data) {
+      if (d.ai_score >= tier.range[0] && d.ai_score <= tier.range[1]) tier.total += getValue(d);
+    }
+    tier.pct = totalValue > 0 ? tier.total / totalValue * 100 : 0;
+  }
+  document.getElementById("tierBar").innerHTML = tiers.map(t => {
+    const label = currentMode === "employment" ? formatWan(t.total) : formatYi(t.total);
+    return `<div class="tier-row">
+      <div class="tier-color" style="background:${t.color}"></div>
+      <span class="tier-name">${t.name}</span>
+      <span class="tier-jobs">${label}</span>
+      <span class="tier-pct">${t.pct.toFixed(0)}%</span>
+    </div>`;
+  }).join("");
+
+  // Pay chart
+  const payBands = [
+    { label: "<5\u4e07", min: 0, max: 5 },
+    { label: "5\u201310\u4e07", min: 5, max: 10 },
+    { label: "10\u201315\u4e07", min: 10, max: 15 },
+    { label: "15\u201325\u4e07", min: 15, max: 25 },
+    { label: ">25\u4e07", min: 25, max: Infinity },
+  ];
+  document.getElementById("payChart").innerHTML = payBands.map(band => {
+    let ws = 0, wc = 0;
+    for (const d of data) {
+      if (d.salary >= band.min && d.salary < band.max) {
+        const v = getValue(d);
+        ws += d.ai_score * v; wc += v;
+      }
+    }
+    const avg = wc > 0 ? ws / wc : 0;
+    return `<div class="hbar-row">
+      <span class="hbar-label">${band.label}</span>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${avg/10*100}%;background:${exposureColorCSS(avg, 0.8)}"></div></div>
+      <span class="hbar-val">${avg.toFixed(1)}</span>
+    </div>`;
+  }).join("");
+
+  // Education chart
+  const eduGroups = [
+    { label: "\u521d\u4e2d\u53ca\u4ee5\u4e0b", match: ["\u521d\u4e2d\u53ca\u4ee5\u4e0b"] },
+    { label: "\u9ad8\u4e2d/\u4e2d\u4e13", match: ["\u9ad8\u4e2d\u4e2d\u4e13"] },
+    { label: "\u5927\u4e13", match: ["\u5927\u4e13"] },
+    { label: "\u672c\u79d1", match: ["\u672c\u79d1"] },
+    { label: "\u7855\u58eb", match: ["\u7855\u58eb"] },
+    { label: "\u535a\u58eb", match: ["\u535a\u58eb"] },
+  ];
+  document.getElementById("eduChart").innerHTML = eduGroups.map(grp => {
+    let ws = 0, wc = 0;
+    for (const d of data) {
+      if (grp.match.includes(d.education)) {
+        const v = getValue(d);
+        ws += d.ai_score * v; wc += v;
+      }
+    }
+    if (wc === 0) return "";
+    const avg = ws / wc;
+    return `<div class="hbar-row">
+      <span class="hbar-label">${grp.label}</span>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${avg/10*100}%;background:${exposureColorCSS(avg, 0.8)}"></div></div>
+      <span class="hbar-val">${avg.toFixed(1)}</span>
+    </div>`;
+  }).join("");
+
+  // High-exposure total
+  let highTotal = 0;
+  for (const d of data) {
+    if (d.ai_score >= 7) highTotal += getValue(d);
+  }
+  if (currentMode === "employment") {
+    document.getElementById("statWages").textContent = formatWan(highTotal);
+  } else {
+    document.getElementById("statWages").textContent = formatWanYi(highTotal);
+  }
+}
+
+// ── Events ──
+
+canvas.addEventListener("mousemove", (e) => {
+  const hit = hitTest(e.clientX, e.clientY);
+  if (hit !== hovered) { hovered = hit; draw(); }
+  if (hovered) { showTooltip(hovered, e.clientX, e.clientY); canvas.style.cursor = "pointer"; }
+  else { hideTooltip(); canvas.style.cursor = "default"; }
+});
+canvas.addEventListener("mouseleave", () => { hovered = null; hideTooltip(); draw(); });
+
+function resize() { dpr = window.devicePixelRatio || 1; layout(); draw(); }
+
+// Mode toggle
+document.getElementById("modeToggle").addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  currentMode = btn.dataset.mode;
+  document.querySelectorAll("#modeToggle button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  computeStats();
+  layout();
+  draw();
+});
+
+// Gradient legend
+function drawGradientLegend() {
+  const c = document.getElementById("gradientLegend");
+  const gctx = c.getContext("2d");
+  for (let x = 0; x < 80; x++) {
+    gctx.fillStyle = exposureColorCSS((x / 79) * 10, 1);
+    gctx.fillRect(x, 0, 1, 8);
+  }
+}
+
+// ── Load ──
+
+fetch("data.json")
+  .then(r => r.json())
+  .then(d => {
+    data = d;
+    buildIndustryCache();
+    computeStats();
+    drawGradientLegend();
+    resize();
+  });
+
+window.addEventListener("resize", resize);
+</script>
+</body>
+</html>
