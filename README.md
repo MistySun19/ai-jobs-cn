@@ -2,7 +2,7 @@
 
 交互式可视化：分析 AI 对中国 ~150 个职业的暴露程度。
 
-**[在线演示 →](https://misty.github.io/ai-jobs-cn/)**
+**[在线演示 →](https://mistysun19.github.io/ai-jobs-cn/)**
 
 ![preview](preview.png)
 
